@@ -27,6 +27,7 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/custom.css">
 
   <!-- =======================================================
   * Template Name: iPortfolio
@@ -49,7 +50,7 @@
     <a href="index.html" class="logo d-flex align-items-center justify-content-center">
       <!-- Uncomment the line below if you also wish to use an image logo -->
       <!-- <img src="assets/img/logo.png" alt=""> -->
-      <h1 class="sitename">Kirill Postregan</h1>
+      <h1 class="sitename">Kirill Postrehan</h1>
     </a>
 
     <div class="social-links text-center">
@@ -67,23 +68,6 @@
         <li><a href="#resume"><i class="bi bi-file-earmark-text navicon"></i> Resume</a></li>
         <li><a href="#portfolio"><i class="bi bi-images navicon"></i> Portfolio</a></li>
         <li><a href="#services"><i class="bi bi-hdd-stack navicon"></i> Services</a></li>
-        <li class="dropdown"><a href="#"><i class="bi bi-menu-button navicon"></i> <span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-          <ul>
-            <li><a href="#">Dropdown 1</a></li>
-            <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-              <ul>
-                <li><a href="#">Deep Dropdown 1</a></li>
-                <li><a href="#">Deep Dropdown 2</a></li>
-                <li><a href="#">Deep Dropdown 3</a></li>
-                <li><a href="#">Deep Dropdown 4</a></li>
-                <li><a href="#">Deep Dropdown 5</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Dropdown 2</a></li>
-            <li><a href="#">Dropdown 3</a></li>
-            <li><a href="#">Dropdown 4</a></li>
-          </ul>
-        </li>
         <li><a href="#contact"><i class="bi bi-envelope navicon"></i> Contact</a></li>
       </ul>
     </nav>
@@ -126,11 +110,11 @@
             </p>
             <div class="row">
             <div class="col-lg-6">
-                <ul>
+                <ol>
                 <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>1 June 2006</span></li>
                 <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+37065211234</span></li>
                 <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>Vilnius, Lithuania</span></li>
-                </ul>
+                </ol>
             </div>
             <div class="col-lg-6">
                 <ul>
@@ -218,6 +202,24 @@
         </div>
 
     </div>
+
+    <table class="custom-table">
+      <tr>
+        <th>Skill</th>
+        <th>Years</th>
+        <th>Rating</th>
+      </tr>
+      <tr>
+        <td class="text">Python</td>
+        <td class="num">4</td>
+        <td class="num">95%</td>
+      </tr>
+      <tr>
+        <td class="text">Deep Learning</td>
+        <td class="num">2</td>
+        <td class="num">75%</td>
+      </tr>
+    </table>
 
     </section><!-- /Skills Section -->
 
@@ -422,7 +424,6 @@
         </div>
 
     </div>
-
     </section><!-- /Services Section -->
 
    
@@ -514,11 +515,9 @@
         </div><!-- End Contact Form -->
 
         </div>
-
     </div>
-
+    
     </section><!-- /Contact Section -->
-
 
   </main>
 
