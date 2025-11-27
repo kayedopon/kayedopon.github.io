@@ -1,3 +1,8 @@
+body {
+  color: var(--default-color);
+  background-color: var(--background-color);
+  font-family: var(--default-font);
+}
 /* 
    1. TYPOGRAPHY SYSTEM — h1–h3 + paragraph overrides
    Completely different visual hierarchy from template
@@ -312,5 +317,117 @@ body.loaded #custom-loader {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/*
+   ANIMATED GRADIENT BACKGROUND — HERO
+*/
+
+section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    130deg,
+    #0d1117,
+    #0d7df2,
+    #8a2be2,
+    #0d1117
+  );
+  background-size: 300% 300%;
+  opacity: 0.70;
+  animation: Gradient 18s ease infinite;
+}
+
+@keyframes Gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+p {
+  color: white !important;
+}
+
+/* 
+   DECORATIVE FLOATING SHAPES 
+*/
+
+.floating-shapes {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 3; 
+}
+
+.floating-shapes .shape {
+  position: absolute;
+  opacity: 0.5;
+  filter: blur(0.5px);
+}
+
+.shape--one {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #0d7df2, transparent);
+  top: 10%;
+  left: 65%;
+  animation: floatUp 18s ease-in-out infinite;
+}
+
+.shape--three {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, #0d7df2, #00e1ff);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  top: 30%;
+  right: -60px;
+  opacity: 0.17;
+  animation: floatRotate 26s linear infinite;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(30px);
+  }
+  50% {
+    transform: translateY(-40px);
+  }
+  100% {
+    transform: translateY(30px);
+  }
+}
+
+@keyframes floatSide {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(60px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes floatRotate {
+  0% {
+    transform: translateY(20px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+  100% {
+    transform: translateY(20px) rotate(360deg);
   }
 }
