@@ -129,7 +129,7 @@ button:active,
   width: 50px !important;
   height: 50px !important;
   border-radius: 10px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.18) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
 }
 
 #scroll-top:hover {
@@ -229,4 +229,88 @@ button:active,
 
 .custom-table td.num {
   text-align: right;
+}
+
+/*
+   CUSTOM ANIMATIONS — Requirement #3
+*/
+
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+section {
+  animation: fadeUp 0.8s ease-out both !important;
+}
+
+@keyframes glowPulse {
+  0% {
+    box-shadow: 0 0 0 rgba(13, 125, 242, 0.0);
+  }
+  50% {
+    box-shadow: 0 20px 20px rgba(13, 125, 242, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(13, 125, 242, 0.0);
+  }
+}
+
+button:hover,
+.scroll-top,
+.btn:hover,
+.php-email-form button[type="submit"]:hover {
+  animation: glowPulse 3s ease-in-out;
+}
+
+/* ============================================================
+   CSS-ONLY LOADER — Requirement #4
+*/
+#custom-loader {
+  position: fixed;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999 !important;
+}
+
+.loader-circle {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(19, 17, 17, 0.2);
+  border-top-color: #1a73e8;
+  border-radius: 50%;
+  animation: spinLoader 1s linear infinite;
+}
+
+@keyframes spinLoader {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+body.loaded #custom-loader {
+  display: none;
+}
+
+/*
+   ACCESSIBILITY — Reduced motion support
+ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
