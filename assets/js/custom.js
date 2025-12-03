@@ -183,4 +183,268 @@ document.addEventListener("DOMContentLoaded", () => {
     popup.classList.add("show");
     setTimeout(() => popup.classList.remove("show"), 3000);
   });
+
+
+  // MEMORY GAME
+  const memoryBoard = document.getElementById("memory-board");
+  const difficultySelect = document.getElementById("memory-difficulty");
+  const startBtn = document.getElementById("memory-start");
+  const restartBtn = document.getElementById("memory-restart");
+  const movesSpan = document.getElementById("memory-moves");
+  const matchesSpan = document.getElementById("memory-matches");
+  const totalSpan = document.getElementById("memory-total");
+  const messageBox = document.getElementById("memory-message");
+
+  if (memoryBoard && difficultySelect && startBtn && restartBtn) {
+
+    // Base data: at least 6 unique items (emojis/icons)
+    const baseItems = [
+    "🐍", 
+    "🤖", 
+    "🧠",
+    "📊", 
+    "💻", 
+    "📚", 
+    "⚙️",
+    "🔬", 
+    "🛰️", 
+    "🚀", 
+    "💡", 
+    "🧪", 
+    "📡", 
+    "🔧", 
+    "📝", 
+    "🗂️"  
+  ];
+
+    const difficultyConfig = {
+      easy: { cols: 4, rows: 3 }, // 12 cards, 6 pairs
+      hard: { cols: 6, rows: 4 }, // 24 cards, 12 pairs
+    };
+
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let moves = 0;
+    let matches = 0;
+    let totalPairs = 0;
+    let gameStarted = false;
+
+    const bestEasySpan = document.getElementById("best-easy");
+    const bestHardSpan = document.getElementById("best-hard");
+
+    // Load existing best scores or set to null
+    function loadBestScores() {
+      bestEasySpan.textContent =
+        localStorage.getItem("memory_best_easy") || "–";
+      bestHardSpan.textContent =
+        localStorage.getItem("memory_best_hard") || "–";
+    }
+
+    // Compare & update best score per difficulty
+    function updateBestScore(finalMoves) {
+      const difficulty = difficultySelect.value;
+
+      const key =
+        difficulty === "easy" ? "memory_best_easy" : "memory_best_hard";
+
+      const stored = localStorage.getItem(key);
+
+      if (stored === null || finalMoves < Number(stored)) {
+        localStorage.setItem(key, finalMoves);
+        if (difficulty === "easy") bestEasySpan.textContent = finalMoves;
+        else bestHardSpan.textContent = finalMoves;
+      }
+    }
+
+    // Load on page start
+    loadBestScores();
+
+    let timerInterval = null;
+    let timerSeconds = 0;
+
+    const timerSpan = document.getElementById("memory-timer");
+
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, "0");
+      const s = String(sec % 60).padStart(2, "0");
+      return `${m}:${s}`;
+    }
+
+    function startTimer() {
+      timerSeconds = 0;
+      timerSpan.textContent = "00:00";
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        timerSpan.textContent = formatTime(timerSeconds);
+      }, 1000);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerSeconds = 0;
+      timerSpan.textContent = "00:00";
+    }
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function resetStats() {
+      moves = 0;
+      matches = 0;
+      movesSpan.textContent = "0";
+      matchesSpan.textContent = "0";
+      totalSpan.textContent = totalPairs.toString();
+      messageBox.textContent = "";
+      messageBox.classList.remove("win");
+    }
+
+    function updateStats() {
+      movesSpan.textContent = moves.toString();
+      matchesSpan.textContent = matches.toString();
+    }
+
+    function createCardElement(symbol) {
+      const card = document.createElement("div");
+      card.classList.add("memory-card");
+      card.dataset.value = symbol;
+
+      const inner = document.createElement("div");
+      inner.classList.add("memory-card-inner");
+
+      const front = document.createElement("div");
+      front.classList.add("memory-card-front");
+      front.textContent = "?";
+
+      const back = document.createElement("div");
+      back.classList.add("memory-card-back");
+      back.textContent = symbol;
+
+      inner.appendChild(front);
+      inner.appendChild(back);
+      card.appendChild(inner);
+
+      card.addEventListener("click", () => handleCardClick(card));
+      return card;
+    }
+
+    function initGame() {
+      resetTimer();
+      const difficulty = difficultySelect.value || "easy";
+      const { cols, rows } = difficultyConfig[difficulty];
+
+      const cardsCount = cols * rows;
+      totalPairs = cardsCount / 2;
+
+      // Prepare items: pick pairs from baseItems
+      let requiredUnique = totalPairs;
+      if (requiredUnique > baseItems.length) {
+        requiredUnique = baseItems.length;
+      }
+
+      const selected = shuffle([...baseItems]).slice(0, requiredUnique);
+      let cardsData = [...selected, ...selected]; // each twice
+
+      // If we have fewer than needed (e.g., baseItems shorter),
+      // we could repeat some again, but with 8 items it's enough.
+
+      cardsData = shuffle(cardsData);
+
+      // Set grid
+      memoryBoard.innerHTML = "";
+      memoryBoard.style.gridTemplateColumns = `repeat(${cols}, minmax(70px, 1fr))`;
+
+      cardsData.forEach((symbol) => {
+        const cardEl = createCardElement(symbol);
+        memoryBoard.appendChild(cardEl);
+      });
+
+      resetStats();
+      restartBtn.disabled = false;
+      gameStarted = true;
+      firstCard = null;
+      secondCard = null;
+      lockBoard = false;
+    }
+
+    function handleCardClick(card) {
+      if (!gameStarted) return;
+      if (lockBoard) return;
+      if (card.classList.contains("flipped") || card.classList.contains("matched")) return;
+
+      card.classList.add("flipped");
+
+      if (!firstCard) {
+        firstCard = card;
+        return;
+      }
+
+      // second card
+      secondCard = card;
+      moves++;
+      updateStats();
+
+      checkForMatch();
+    }
+
+    function checkForMatch() {
+      const isMatch = firstCard.dataset.value === secondCard.dataset.value;
+
+      if (isMatch) {
+        firstCard.classList.add("matched");
+        secondCard.classList.add("matched");
+        firstCard = null;
+        secondCard = null;
+        matches++;
+        updateStats();
+
+        if (matches === totalPairs) {
+          messageBox.textContent = "🎉 You matched all pairs! Well done!";
+          messageBox.classList.add("win");
+
+          stopTimer();                 
+          updateBestScore(moves);  
+        }
+      } else {
+        lockBoard = true;
+        setTimeout(() => {
+          firstCard.classList.remove("flipped");
+          secondCard.classList.remove("flipped");
+          firstCard = null;
+          secondCard = null;
+          lockBoard = false;
+        }, 1000);
+      }
+    }
+
+    // Events
+    startBtn.addEventListener("click", () => {
+      initGame();
+      startTimer();
+    });
+
+    restartBtn.addEventListener("click", () => {
+      initGame();
+      startTimer();
+    });
+
+    difficultySelect.addEventListener("change", () => {
+      if (gameStarted) {
+        initGame();
+        startTimer();
+      }
+    });
+  }
+
 });

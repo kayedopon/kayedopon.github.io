@@ -437,7 +437,57 @@
     </div>
     </section><!-- /Services Section -->
 
-   
+        <!-- Memory Game Section -->
+    <section id="memory-game" class="section light-background">
+
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Memory Game</h2>
+        <p>Test your memory by matching pairs of cards. Choose a difficulty and start playing!</p>
+      </div>
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="memory-game-wrapper">
+
+          <!-- Controls + Stats -->
+          <div class="memory-sidebar">
+            <div class="memory-controls">
+              <label for="memory-difficulty" class="form-label">Difficulty</label>
+              <select id="memory-difficulty" class="form-select">
+                <option value="easy">Easy (4 × 3)</option>
+                <option value="hard">Hard (6 × 4)</option>
+              </select>
+
+              <div class="memory-buttons mt-3">
+                <button id="memory-start" class="btn btn-primary">Start</button>
+                <button id="memory-restart" class="btn btn-outline-secondary" disabled>Restart</button>
+              </div>
+            </div>
+
+            <div class="memory-stats mt-4">
+            <h5>Stats</h5>
+              <p>Moves: <span id="memory-moves">0</span></p>
+              <p>Matches: <span id="memory-matches">0</span>/<span id="memory-total">0</span></p>
+              <p>Time: <span id="memory-timer">00:00</span></p>
+              <p>Best (Easy): <span id="best-easy">–</span></p>
+              <p>Best (Hard): <span id="best-hard">–</span></p>
+            </div>
+
+
+            <div id="memory-message" class="memory-message mt-3"></div>
+          </div>
+
+          <!-- Game Board -->
+          <div class="memory-board-container">
+            <div id="memory-board" class="memory-board">
+              <!-- Cards will be generated here by JavaScript -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <!-- /Memory Game Section -->
+
 
     <!-- Contact Section -->
     <section id="contact" class="contact section">
